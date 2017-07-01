@@ -1,6 +1,7 @@
 import math
 import pygame
 
+from mygame.client.config.colors import SELECTION_RECT_COLOR
 from mygame.client.config.settings import HEX_RADIUS_DEFAULT
 from mygame.client.config.settings import HEX_RADIUS_MAX
 from mygame.client.config.settings import HEX_RADIUS_MID
@@ -30,21 +31,24 @@ class HexGrid:
 
         self.__last_mouse_position = None
         self.__mouse_down_position = None
+        self.__mouse_button = None
 
     def handle_events(self, events):
         for event in events:
             # print(f'Event: {event}')
             if event.type == pygame.MOUSEMOTION:
                 self.__set_mouse_position(event.pos)
-                if self.__mouse_down_position:
-                    # The user is dragging the window rectangle.
+                if self.__mouse_down_position and self.__mouse_button == 3:
+                    # The user is dragging in the window with the right mouse button.
                     offset = (self.__mouse_down_position[0] - event.pos[0],
                               self.__mouse_down_position[1] - event.pos[1])
                     self.__mouse_down_position = event.pos
-                    self.__drag_grid(offset)
+                    self.__move_grid(offset)
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.__mouse_button = event.button
                 self.__mouse_down_position = event.pos
             elif event.type == pygame.MOUSEBUTTONUP:
+                self.__mouse_button = None
                 self.__mouse_down_position = None
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_PLUS or event.key == pygame.K_EQUALS:
@@ -65,7 +69,7 @@ class HexGrid:
         coord_z = mouse_y * 2 / 3 / self.hex_radius
         self.__hover_coord = Coord(coord_x, -coord_x - coord_z, coord_z).add_coord(self.__center_coord)
 
-    def __drag_grid(self, offset):
+    def __move_grid(self, offset):
         self.__coord_offset_x = self.__coord_offset_x - offset[0]
         self.__coord_offset_y = self.__coord_offset_y - offset[1]
         if abs(self.__coord_offset_x) > self.hex_width:
@@ -101,7 +105,16 @@ class HexGrid:
         self.hex_width_half = self.hex_width / 2
 
     def draw(self):
+        # The user is dragging in the window with the left mouse button.
+        self.__draw_selection()
         self.__draw_hover()
+
+    def __draw_selection(self):
+        if self.__mouse_down_position and self.__mouse_button == 1:
+            pos1 = self.__mouse_down_position
+            pos2 = self.__last_mouse_position
+            corner_points = [pos1, (pos1[0], pos2[1]), pos2, (pos2[0], pos1[1])]
+            pygame.draw.aalines(self.surface, SELECTION_RECT_COLOR, True, corner_points)
 
     def __draw_hover(self):
         # Hex.draw_circle(self.surface, self.__last_mouse_position, int(self.hex_width_half), HOVER_HEX_COLOR)

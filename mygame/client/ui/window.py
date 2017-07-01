@@ -14,6 +14,8 @@ from mygame.common.unit.sun import Sun
 class Window:
     def __init__(self, client):
         self.client = client
+        # self.window_settings = pygame.HWSURFACE | pygame.DOUBLEBUF
+        # self.screen = pygame.display.set_mode((800, 600), self.window_settings)
         self.window_settings = pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.FULLSCREEN
         self.screen = pygame.display.set_mode(Window.get_display_mode(), self.window_settings)
         pygame.display.set_caption(WINDOW_TITLE)

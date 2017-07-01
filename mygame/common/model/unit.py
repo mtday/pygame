@@ -4,6 +4,7 @@ class Unit:
         self.unit_type = unit_type
         self.unit_id = unit_id
         self.coord = coord
+        self.selected = False
 
     def draw(self, hexgrid):
         pass
