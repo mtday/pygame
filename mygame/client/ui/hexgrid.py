@@ -1,19 +1,12 @@
 import math
 
-import pygame
-from mygame.client.config.colors import BLACK
-from mygame.client.config.colors import GREEN
-from mygame.client.config.colors import HEX_GRID_LINE_COLOR
-from mygame.client.config.colors import RED
-from mygame.client.config.colors import YELLOW
-from mygame.common.model.coord import Coord
-from mygame.common.model.hex import Hex
-
-from mygame.client.config.settings import FONT_NAME_DEFAULT
+from mygame.client.config.colors import CYAN
 from mygame.client.config.settings import HEX_RADIUS_DEFAULT
 from mygame.client.config.settings import HEX_RADIUS_MAX
 from mygame.client.config.settings import HEX_RADIUS_MID
 from mygame.client.config.settings import HEX_RADIUS_MIN
+from mygame.client.ui.hex import Hex
+from mygame.common.model.coord import Coord
 
 
 class HexGrid:
@@ -85,40 +78,11 @@ class HexGrid:
         self.hex_width_half = self.hex_width / 2
 
     def draw(self):
-        # self.__draw_grid()
-        self.__draw_center()
-        self.__draw_origin()
         self.__draw_hover()
-
-        font = pygame.font.SysFont(FONT_NAME_DEFAULT, 15)
-        self.surface.blit(font.render(f'{self.hex_radius}', True, YELLOW, BLACK), (10, 10))
-
-    def __draw_grid(self):
-        top_left = self.__get_top_left_coord_center()
-        rows = int(self.surface.get_height() / self.hex_vertical_increase) + 1
-        cols = int(self.surface.get_width() / self.hex_width) + 1
-        for r in range(0, rows):
-            for c in range(0, cols):
-                hex_offset = int((r % 2) * self.hex_width_half)
-                center = (top_left[0] + c * self.hex_width + hex_offset, top_left[1] + r * self.hex_vertical_increase)
-                Hex.draw_hex(self.surface, center, self.hex_radius, HEX_GRID_LINE_COLOR)
-
-    def __draw_center(self):
-        self.__draw_coord_ring(self.center_coord, HEX_GRID_LINE_COLOR, 2)
-        self.__draw_coord_neighbors(self.center_coord, HEX_GRID_LINE_COLOR)
-        self.__draw_coord(self.center_coord, YELLOW)
 
     def __draw_hover(self):
         if self.hover_coord:
-            self.__draw_coord_ring(self.hover_coord, HEX_GRID_LINE_COLOR, 2)
-            self.__draw_coord_neighbors(self.hover_coord, HEX_GRID_LINE_COLOR)
-            self.__draw_coord(self.hover_coord, RED)
-
-    def __draw_origin(self):
-        origin = Coord()
-        self.__draw_coord_ring(origin, HEX_GRID_LINE_COLOR, 2)
-        self.__draw_coord_neighbors(origin, HEX_GRID_LINE_COLOR)
-        self.__draw_coord(origin, GREEN)
+            self.__draw_coord(self.hover_coord, CYAN)
 
     def __draw_coord(self, coord, color):
         offset = coord.subtract_coord(self.center_coord)
@@ -126,23 +90,5 @@ class HexGrid:
         coord_x = coord_x + self.surface.get_width() / 2 + self.coord_offset_x
         coord_y = self.hex_radius * 3 / 2 * offset.z
         coord_y = coord_y + self.surface.get_height() / 2 + self.coord_offset_y
-        Hex.draw_circle(self.surface, (coord_x, coord_y), self.hex_width_half, color, coord)
+        Hex.draw_circle(self.surface, (coord_x, coord_y), self.hex_width_half, color)
 
-    def __draw_coord_neighbors(self, coord, color):
-        [self.__draw_coord(neighbor, color) for neighbor in coord.get_neighbors()]
-
-    def __draw_coord_ring(self, coord, color, distance):
-        [self.__draw_coord(surrounding, color) for surrounding in coord.get_ring(distance)]
-
-    def __get_top_left_coord_center(self):
-        top_left = (self.surface.get_width() / 2 + self.coord_offset_x,
-                    self.surface.get_height() / 2 + self.coord_offset_y)
-        while top_left[0] >= 0 or top_left[1] >= 0:
-            if top_left[0] >= 0:
-                if top_left[1] >= 0:
-                    top_left = (top_left[0] - self.hex_width_half, top_left[1] - self.hex_vertical_increase)
-                else:
-                    top_left = (top_left[0] - self.hex_width, top_left[1])
-            elif top_left[1] >= 0:
-                top_left = (top_left[0], top_left[1] - self.hex_height)
-        return top_left
