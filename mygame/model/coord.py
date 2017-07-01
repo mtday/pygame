@@ -1,5 +1,7 @@
 
 class Coord:
+    __directions = [(1, -1, 0), (1, 0, -1), (0, 1, -1), (-1, 1, 0), (-1, 0, 1), (0, -1, 1)]
+
     def __init__(self, x=0, y=0, z=0):
         if isinstance(x, int) and isinstance(y, int) and isinstance(z, int):
             self.x = x
@@ -55,3 +57,20 @@ class Coord:
 
     def subtract_coord(self, coord):
         return self.subtract(coord.x, coord.y, coord.z)
+
+    def get_neighbor(self, i):
+        (x, y, z) = Coord.__directions[i]
+        return self.add(x, y, z)
+
+    def get_neighbors(self):
+        return [self.get_neighbor(i) for i in range(6)]
+
+    def get_ring(self, distance):
+        results = []
+        direction = Coord.__directions[4]
+        coord = self.add_coord(Coord(direction[0] * distance, direction[1] * distance, direction[2] * distance))
+        for i in range(6):
+            for j in range(distance):
+                results.append(coord)
+                coord = coord.get_neighbor(i)
+        return results

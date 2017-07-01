@@ -175,3 +175,45 @@ class CoordTest(unittest.TestCase):
         self.assertEqual(coord.x, 2)
         self.assertEqual(coord.y, 0)
         self.assertEqual(coord.z, -2)
+
+    def test_get_neighbor_from_origin(self):
+        coord = Coord()
+        neighbors = [coord.get_neighbor(i) for i in range(6)]
+        self.assertEqual(len(neighbors), 6)
+        self.assertEqual((neighbors[0].x, neighbors[0].y, neighbors[0].z), (1, -1, 0))
+        self.assertEqual((neighbors[1].x, neighbors[1].y, neighbors[1].z), (1, 0, -1))
+        self.assertEqual((neighbors[2].x, neighbors[2].y, neighbors[2].z), (0, 1, -1))
+        self.assertEqual((neighbors[3].x, neighbors[3].y, neighbors[3].z), (-1, 1, 0))
+        self.assertEqual((neighbors[4].x, neighbors[4].y, neighbors[4].z), (-1, 0, 1))
+        self.assertEqual((neighbors[5].x, neighbors[5].y, neighbors[5].z), (0, -1, 1))
+
+    def test_get_neighbor_from_non_origin(self):
+        coord = Coord(2, -3, 1)
+        neighbors = [coord.get_neighbor(i) for i in range(6)]
+        self.assertEqual(len(neighbors), 6)
+        self.assertEqual((neighbors[0].x, neighbors[0].y, neighbors[0].z), (3, -4, 1))
+        self.assertEqual((neighbors[1].x, neighbors[1].y, neighbors[1].z), (3, -3, 0))
+        self.assertEqual((neighbors[2].x, neighbors[2].y, neighbors[2].z), (2, -2, 0))
+        self.assertEqual((neighbors[3].x, neighbors[3].y, neighbors[3].z), (1, -2, 1))
+        self.assertEqual((neighbors[4].x, neighbors[4].y, neighbors[4].z), (1, -3, 2))
+        self.assertEqual((neighbors[5].x, neighbors[5].y, neighbors[5].z), (2, -4, 2))
+
+    def test_get_neighbors_from_origin(self):
+        neighbors = Coord().get_neighbors()
+        self.assertEqual(len(neighbors), 6)
+        self.assertEqual((neighbors[0].x, neighbors[0].y, neighbors[0].z), (1, -1, 0))
+        self.assertEqual((neighbors[1].x, neighbors[1].y, neighbors[1].z), (1, 0, -1))
+        self.assertEqual((neighbors[2].x, neighbors[2].y, neighbors[2].z), (0, 1, -1))
+        self.assertEqual((neighbors[3].x, neighbors[3].y, neighbors[3].z), (-1, 1, 0))
+        self.assertEqual((neighbors[4].x, neighbors[4].y, neighbors[4].z), (-1, 0, 1))
+        self.assertEqual((neighbors[5].x, neighbors[5].y, neighbors[5].z), (0, -1, 1))
+
+    def test_get_neighbors_from_non_origin(self):
+        neighbors = Coord(2, -3, 1).get_neighbors()
+        self.assertEqual(len(neighbors), 6)
+        self.assertEqual((neighbors[0].x, neighbors[0].y, neighbors[0].z), (3, -4, 1))
+        self.assertEqual((neighbors[1].x, neighbors[1].y, neighbors[1].z), (3, -3, 0))
+        self.assertEqual((neighbors[2].x, neighbors[2].y, neighbors[2].z), (2, -2, 0))
+        self.assertEqual((neighbors[3].x, neighbors[3].y, neighbors[3].z), (1, -2, 1))
+        self.assertEqual((neighbors[4].x, neighbors[4].y, neighbors[4].z), (1, -3, 2))
+        self.assertEqual((neighbors[5].x, neighbors[5].y, neighbors[5].z), (2, -4, 2))

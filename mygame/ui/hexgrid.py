@@ -84,7 +84,7 @@ class HexGrid:
         self.hex_width_half = self.hex_width / 2
 
     def draw(self):
-        self.__draw_grid()
+        # self.__draw_grid()
         self.__draw_center()
         self.__draw_origin()
         self.__draw_hover()
@@ -103,14 +103,21 @@ class HexGrid:
                 Hex.draw_hex(self.surface, center, self.hex_radius, HEX_GRID_LINE_COLOR)
 
     def __draw_center(self):
+        self.__draw_coord_ring(self.center_coord, HEX_GRID_LINE_COLOR, 2)
+        self.__draw_coord_neighbors(self.center_coord, HEX_GRID_LINE_COLOR)
         self.__draw_coord(self.center_coord, YELLOW)
 
     def __draw_hover(self):
         if self.hover_coord:
+            self.__draw_coord_ring(self.hover_coord, HEX_GRID_LINE_COLOR, 2)
+            self.__draw_coord_neighbors(self.hover_coord, HEX_GRID_LINE_COLOR)
             self.__draw_coord(self.hover_coord, RED)
 
     def __draw_origin(self):
-        self.__draw_coord(Coord(), GREEN)
+        origin = Coord()
+        self.__draw_coord_ring(origin, HEX_GRID_LINE_COLOR, 2)
+        self.__draw_coord_neighbors(origin, HEX_GRID_LINE_COLOR)
+        self.__draw_coord(origin, GREEN)
 
     def __draw_coord(self, coord, color):
         offset = coord.subtract_coord(self.center_coord)
@@ -119,6 +126,12 @@ class HexGrid:
         coord_y = self.hex_radius * 3 / 2 * offset.z
         coord_y = coord_y + self.surface.get_height() / 2 + self.coord_offset_y
         Hex.draw_circle(self.surface, (coord_x, coord_y), self.hex_width_half, color, coord)
+
+    def __draw_coord_neighbors(self, coord, color):
+        [self.__draw_coord(neighbor, color) for neighbor in coord.get_neighbors()]
+
+    def __draw_coord_ring(self, coord, color, distance):
+        [self.__draw_coord(surrounding, color) for surrounding in coord.get_ring(distance)]
 
     def __get_top_left_coord_center(self):
         top_left = (self.surface.get_width() / 2 + self.coord_offset_x,
