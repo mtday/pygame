@@ -10,7 +10,7 @@ class Hex:
 
     @staticmethod
     def draw_circle(surface, center, radius, color):
-        pygame.gfxdraw.aacircle(surface, int(center[0]), int(center[1]), int(radius), color)
+        pygame.gfxdraw.aacircle(surface, center[0], center[1], radius, color)
 
     @staticmethod
     def draw_hex(surface, center, radius, color):

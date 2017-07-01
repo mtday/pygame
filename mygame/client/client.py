@@ -1,8 +1,8 @@
 
 import pygame
 
-from mygame.client.ui.window import Window
 from mygame.client.config.settings import FPS_TARGET
+from mygame.client.ui.window import Window
 
 
 class Client:
