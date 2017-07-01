@@ -1,6 +1,7 @@
 
-from mygame.model.coord import Coord
 import unittest
+
+from mygame.common.model.coord import Coord
 
 
 class CoordTest(unittest.TestCase):

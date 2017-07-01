@@ -1,10 +1,11 @@
 import math
 import pygame
 
-from mygame.config.colors import BLACK
-from mygame.config.colors import YELLOW
-from mygame.config.settings import FONT_NAME_DEFAULT
+from mygame.client.config.colors import BLACK
+from mygame.client.config.colors import YELLOW
 from pygame import gfxdraw
+
+from mygame.client.config.settings import FONT_NAME_DEFAULT
 
 
 class Hex:

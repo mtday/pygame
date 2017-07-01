@@ -1,18 +1,19 @@
 import math
-import pygame
 
-from mygame.config.colors import BLACK
-from mygame.config.colors import GREEN
-from mygame.config.colors import HEX_GRID_LINE_COLOR
-from mygame.config.colors import RED
-from mygame.config.colors import YELLOW
-from mygame.config.settings import FONT_NAME_DEFAULT
-from mygame.config.settings import HEX_RADIUS_DEFAULT
-from mygame.config.settings import HEX_RADIUS_MIN
-from mygame.config.settings import HEX_RADIUS_MID
-from mygame.config.settings import HEX_RADIUS_MAX
-from mygame.model.coord import Coord
-from mygame.model.hex import Hex
+import pygame
+from mygame.client.config.colors import BLACK
+from mygame.client.config.colors import GREEN
+from mygame.client.config.colors import HEX_GRID_LINE_COLOR
+from mygame.client.config.colors import RED
+from mygame.client.config.colors import YELLOW
+from mygame.common.model.coord import Coord
+from mygame.common.model.hex import Hex
+
+from mygame.client.config.settings import FONT_NAME_DEFAULT
+from mygame.client.config.settings import HEX_RADIUS_DEFAULT
+from mygame.client.config.settings import HEX_RADIUS_MAX
+from mygame.client.config.settings import HEX_RADIUS_MID
+from mygame.client.config.settings import HEX_RADIUS_MIN
 
 
 class HexGrid:

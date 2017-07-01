@@ -1,14 +1,14 @@
 import pygame
+from mygame.client.config.colors import BLACK
+from mygame.client.ui.hexgrid import HexGrid
 
-from mygame.config.colors import BLACK
-from mygame.config.settings import WINDOW_SIZE_DEFAULT
-from mygame.config.settings import WINDOW_TITLE
-from mygame.ui.hexgrid import HexGrid
+from mygame.client.config.settings import WINDOW_SIZE_DEFAULT
+from mygame.client.config.settings import WINDOW_TITLE
 
 
 class Window:
-    def __init__(self, main):
-        self.main = main
+    def __init__(self, client):
+        self.client = client
         self.window_settings = pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.FULLSCREEN
         self.screen = pygame.display.set_mode(Window.get_display_mode(), self.window_settings)
         pygame.display.set_caption(WINDOW_TITLE)
@@ -26,7 +26,7 @@ class Window:
         for event in events:
             # print(f'Event: {event}')
             if event.type == pygame.QUIT:
-                self.main.stop()
+                self.client.stop()
             elif event.type == pygame.VIDEORESIZE:
                 self.screen = pygame.display.set_mode(event.size, self.window_settings)
             elif event.type == pygame.MOUSEMOTION:
@@ -42,7 +42,7 @@ class Window:
                 self.mouse_down_position = None
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
-                    self.main.stop()
+                    self.client.stop()
                 if event.key == pygame.K_PLUS or event.key == pygame.K_EQUALS:
                     self.hexgrid.zoom_in()
                 if event.key == pygame.K_MINUS or event.key == pygame.K_UNDERSCORE:

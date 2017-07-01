@@ -1,10 +1,11 @@
 
-from mygame.config.settings import FPS_TARGET
-from mygame.ui.window import Window
 import pygame
 
+from mygame.client.ui.window import Window
+from mygame.client.config.settings import FPS_TARGET
 
-class Main:
+
+class Client:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
@@ -32,4 +33,4 @@ class Main:
 
 
 if __name__ == '__main__':
-    Main().run()
+    Client().run()
