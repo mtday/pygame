@@ -106,8 +106,6 @@ class HexGrid:
 
     def __draw_hover(self):
         Hex.draw_circle(self.surface, self.__last_mouse_position, int(self.hex_width_half), HOVER_HEX_COLOR)
-        if self.__hover_coord:
-            self.__draw_coord(self.__hover_coord, HOVER_HEX_COLOR)
 
     def get_center_position(self, coord):
         offset = coord.subtract_coord(self.__center_coord)
