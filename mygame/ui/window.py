@@ -29,6 +29,11 @@ class Window:
                 self.mouse_down_position = event.pos
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.mouse_down_position = None
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_PLUS or event.key == pygame.K_EQUALS:
+                    self.hexgrid.zoom_in()
+                if event.key == pygame.K_MINUS or event.key == pygame.K_UNDERSCORE:
+                    self.hexgrid.zoom_out()
 
     def draw(self):
         self.screen.fill(BLACK)

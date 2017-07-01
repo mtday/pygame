@@ -1,5 +1,5 @@
 
-from mygame.config.settings import TARGET_FPS
+from mygame.config.settings import FPS_TARGET
 from mygame.ui.window import Window
 import pygame
 
@@ -19,7 +19,7 @@ class Main:
     def run(self):
         self.running = True
         while self.running:
-            self.clock.tick(TARGET_FPS)
+            self.clock.tick(FPS_TARGET)
             self.handle_events()
             self.draw()
         pygame.quit()

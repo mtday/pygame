@@ -3,7 +3,7 @@ import pygame
 
 from mygame.config.colors import BLACK
 from mygame.config.colors import YELLOW
-from mygame.config.settings import DEFAULT_FONT_NAME
+from mygame.config.settings import FONT_NAME_DEFAULT
 from pygame import gfxdraw
 
 
@@ -15,11 +15,9 @@ class Hex:
     @staticmethod
     def draw_circle(surface, center, radius, color, coord=None):
         pygame.gfxdraw.aacircle(surface, int(center[0]), int(center[1]), int(radius), color)
-        # int_center = (int(center[0]), int(center[1]))
-        # pygame.draw.circle(surface, color, int_center, radius, 1)
 
-        if coord:
-            font = pygame.font.SysFont(DEFAULT_FONT_NAME, 15)
+        if coord and radius > 12:
+            font = pygame.font.SysFont(FONT_NAME_DEFAULT, 15)
             x_label = coord.x if coord.x != 0 else "x"
             y_label = coord.y if coord.y != 0 else "y"
             z_label = coord.z if coord.z != 0 else "z"
@@ -38,8 +36,8 @@ class Hex:
         corner_points = [Hex.get_point(center, radius, i) for i in range(0, 6)]
         pygame.draw.aalines(surface, color, True, corner_points)
 
-        if coord:
-            font = pygame.font.SysFont(DEFAULT_FONT_NAME, 15)
+        if coord and radius > 12:
+            font = pygame.font.SysFont(FONT_NAME_DEFAULT, 15)
             x_label = coord.x if coord.x != 0 else "x"
             y_label = coord.y if coord.y != 0 else "y"
             z_label = coord.z if coord.z != 0 else "z"
