@@ -14,6 +14,8 @@ class Window:
         pygame.display.set_caption(WINDOW_TITLE)
         self.hexgrid = HexGrid(self.screen)
         self.mouse_down_position = None
+        if self.window_settings & pygame.FULLSCREEN:
+            pygame.mouse.set_visible(False)
 
     @staticmethod
     def get_display_mode():

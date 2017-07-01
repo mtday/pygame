@@ -1,6 +1,6 @@
 import math
 
-from mygame.client.config.colors import CYAN
+from mygame.client.config.colors import HOVER_HEX_COLOR
 from mygame.client.config.settings import HEX_RADIUS_DEFAULT
 from mygame.client.config.settings import HEX_RADIUS_MAX
 from mygame.client.config.settings import HEX_RADIUS_MID
@@ -82,7 +82,7 @@ class HexGrid:
 
     def __draw_hover(self):
         if self.hover_coord:
-            self.__draw_coord(self.hover_coord, CYAN)
+            self.__draw_coord(self.hover_coord, HOVER_HEX_COLOR)
 
     def __draw_coord(self, coord, color):
         offset = coord.subtract_coord(self.center_coord)
