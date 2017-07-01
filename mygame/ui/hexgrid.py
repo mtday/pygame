@@ -9,6 +9,7 @@ from mygame.config.colors import YELLOW
 from mygame.config.settings import FONT_NAME_DEFAULT
 from mygame.config.settings import HEX_RADIUS_DEFAULT
 from mygame.config.settings import HEX_RADIUS_MIN
+from mygame.config.settings import HEX_RADIUS_MID
 from mygame.config.settings import HEX_RADIUS_MAX
 from mygame.model.coord import Coord
 from mygame.model.hex import Hex
@@ -62,7 +63,7 @@ class HexGrid:
 
     def zoom_in(self):
         if self.hex_radius < HEX_RADIUS_MAX:
-            delta = 4 if self.hex_radius >= HEX_RADIUS_DEFAULT else 2
+            delta = 4 if self.hex_radius >= HEX_RADIUS_MID else 2
             self.hex_radius = self.hex_radius + delta
             self.__set_size_vars()
             if self.last_mouse_position:
@@ -70,7 +71,7 @@ class HexGrid:
 
     def zoom_out(self):
         if self.hex_radius > HEX_RADIUS_MIN:
-            delta = 2 if self.hex_radius <= HEX_RADIUS_DEFAULT else 4
+            delta = 2 if self.hex_radius <= HEX_RADIUS_MID else 4
             self.hex_radius = self.hex_radius - delta
             self.__set_size_vars()
             if self.last_mouse_position:
