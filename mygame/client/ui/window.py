@@ -20,7 +20,7 @@ class Window:
         self.screen = pygame.display.set_mode(Window.get_display_mode(), self.window_settings)
         pygame.display.set_caption(WINDOW_TITLE)
         self.hexgrid = HexGrid(self.screen)
-        self.unitmgr = UnitMgr(self.screen)
+        self.unitmgr = UnitMgr(self.hexgrid)
         # if self.window_settings & pygame.FULLSCREEN:
         #     pygame.mouse.set_visible(False)
 
@@ -28,7 +28,11 @@ class Window:
         # TODO: These should come from the server
         self.unitmgr.add(Sun('sun', Coord()))
         x = random.randint(-20, 20)
+        if abs(x) < 3:
+            x *= 3
         y = random.randint(-20, 20)
+        if abs(y) < 3:
+            y *= 3
         z = -x - y
         self.unitmgr.add(Planet('planet', Coord(x, y, z)))
 
@@ -56,5 +60,5 @@ class Window:
     def draw(self):
         self.screen.fill(BLACK)
         self.hexgrid.draw()
-        self.unitmgr.draw(self.hexgrid)
+        self.unitmgr.draw()
         pygame.display.flip()

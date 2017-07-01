@@ -2,6 +2,7 @@
 import pygame
 import pygame.gfxdraw
 
+from mygame.client.config.colors import SELECTED_UNIT_OUTLINE_COLOR
 from mygame.client.config.colors import UNIT_PLANET_FILL_COLOR
 from mygame.client.config.colors import UNIT_PLANET_OUTLINE_COLOR
 from mygame.common.model.unit import Unit
@@ -19,3 +20,7 @@ class Planet(Unit):
                                      int(hexgrid.hex_width_half), UNIT_PLANET_FILL_COLOR)
         pygame.gfxdraw.aacircle(hexgrid.surface, center[0], center[1],
                                 int(hexgrid.hex_width_half), UNIT_PLANET_OUTLINE_COLOR)
+
+        if self.selected:
+            pygame.gfxdraw.aacircle(hexgrid.surface, center[0], center[1],
+                                    int(hexgrid.hex_width_half * 1.4), SELECTED_UNIT_OUTLINE_COLOR)

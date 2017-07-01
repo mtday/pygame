@@ -5,6 +5,7 @@ class Unit:
         self.unit_id = unit_id
         self.coord = coord
         self.selected = False
+        self.movable = False
 
     def draw(self, hexgrid):
         pass

@@ -1,9 +1,15 @@
 
+import pygame
+
 
 class UnitMgr:
-    def __init__(self, surface):
-        self.surface = surface
+    def __init__(self, hexgrid):
+        self.hexgrid = hexgrid
         self.__units = {}
+
+        self.__mouse_button = None
+        self.__mouse_down_position = None
+        self.__last_mouse_position = None
 
     def __len__(self):
         return len(self.__units)
@@ -35,9 +41,33 @@ class UnitMgr:
     def get_by_type(self, unit_type):
         return [unit for unit in self.__units.values() if unit.unit_type == unit_type]
 
-    def handle_events(self, events):
-        pass
+    def get_selected(self, selected=True):
+        return [unit for unit in self.__units.values() if unit.selected == selected]
 
-    def draw(self, hexgrid):
+    def get_within(self, pos1, pos2):
+        return [unit for unit in self.__units.values() if self.hexgrid.is_within(pos1, pos2, unit.coord)]
+
+    def handle_events(self, events):
+        for event in events:
+            # print(f'Event: {event}')
+            if event.type == pygame.MOUSEMOTION:
+                self.__last_mouse_position = event.pos
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.__mouse_button = event.button
+                self.__mouse_down_position = event.pos
+                if self.__mouse_button == 1:
+                    # User is starting a selection, deselect all selected units
+                    selected_units = self.get_selected()
+                    for unit in selected_units:
+                        unit.selected = False
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if self.__mouse_button == 1:
+                    # User used the left mouse button and made a selection, mark the appropriate units as selected
+                    for unit in self.get_within(self.__mouse_down_position, self.__last_mouse_position):
+                        unit.selected = True
+                self.__mouse_button = None
+                self.__mouse_down_position = None
+
+    def draw(self):
         for unit in self.__units.values():
-            unit.draw(hexgrid)
+            unit.draw(self.hexgrid)

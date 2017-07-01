@@ -91,3 +91,59 @@ class UnitMgrTest(unittest.TestCase):
         self.assertIsNotNone(type2)
         self.assertEqual(len(type2), 1)
         self.assertEqual('idB', type2[0].unit_id)
+
+    def test_get_selected_default(self):
+        unitmgr = UnitMgr(None)
+        a = Unit('type1', 'id1', Coord())
+        b = Unit('type2', 'id2', Coord())
+        unitmgr.add(a)
+        unitmgr.add(b)
+
+        empty = unitmgr.get_selected()
+        self.assertIsNotNone(empty)
+        self.assertEqual(len(empty), 0)
+
+        a.selected = True
+
+        sel = unitmgr.get_selected()
+        self.assertIsNotNone(sel)
+        self.assertEqual(len(sel), 1)
+        self.assertEqual(sel[0].unit_id, a.unit_id)
+
+    def test_get_selected_true(self):
+        unitmgr = UnitMgr(None)
+        a = Unit('type1', 'id1', Coord())
+        b = Unit('type2', 'id2', Coord())
+        unitmgr.add(a)
+        unitmgr.add(b)
+
+        empty = unitmgr.get_selected(True)
+        self.assertIsNotNone(empty)
+        self.assertEqual(len(empty), 0)
+
+        a.selected = True
+
+        sel = unitmgr.get_selected(True)
+        self.assertIsNotNone(sel)
+        self.assertEqual(len(sel), 1)
+        self.assertEqual(sel[0].unit_id, a.unit_id)
+
+    def test_get_selected_false(self):
+        unitmgr = UnitMgr(None)
+        a = Unit('type1', 'id1', Coord())
+        b = Unit('type2', 'id2', Coord())
+        unitmgr.add(a)
+        unitmgr.add(b)
+
+        both = unitmgr.get_selected(False)
+        self.assertIsNotNone(both)
+        self.assertEqual(len(both), 2)
+        self.assertEqual(both[0].unit_id, a.unit_id)
+        self.assertEqual(both[1].unit_id, b.unit_id)
+
+        a.selected = True
+
+        unsel = unitmgr.get_selected(False)
+        self.assertIsNotNone(unsel)
+        self.assertEqual(len(unsel), 1)
+        self.assertEqual(unsel[0].unit_id, b.unit_id)

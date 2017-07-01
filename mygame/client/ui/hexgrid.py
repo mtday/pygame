@@ -55,7 +55,6 @@ class HexGrid:
                     self.__zoom_in()
                 if event.key == pygame.K_MINUS or event.key == pygame.K_UNDERSCORE:
                     self.__zoom_out()
-        pass
 
     def __set_mouse_position(self, position):
         # Save the position so we can fix the hover coordinate after zoom changes.
@@ -74,12 +73,12 @@ class HexGrid:
         self.__coord_offset_y = self.__coord_offset_y - offset[1]
         if abs(self.__coord_offset_x) > self.hex_width:
             delta = int(self.__coord_offset_x / self.hex_width)
-            self.__coord_offset_x = self.__coord_offset_x - delta * self.hex_width
+            self.__coord_offset_x -= delta * self.hex_width
             self.__center_coord = self.__center_coord.add(-delta, delta, 0)
         height_delta = self.hex_height * 3 / 2
         if abs(self.__coord_offset_y) > height_delta:
             delta = int(self.__coord_offset_y / height_delta)
-            self.__coord_offset_y = self.__coord_offset_y - delta * height_delta
+            self.__coord_offset_y -= delta * height_delta
             self.__center_coord = self.__center_coord.add(delta, delta, -2 * delta)
 
     def __zoom_in(self):
@@ -123,10 +122,17 @@ class HexGrid:
     def get_center_position(self, coord):
         offset = coord.subtract_coord(self.__center_coord)
         coord_x = self.hex_radius * HexGrid.precomputed_sqrt3 * (offset.x + offset.z / 2)
-        coord_x = coord_x + self.surface.get_width() / 2 + self.__coord_offset_x
+        coord_x += self.surface.get_width() / 2 + self.__coord_offset_x
         coord_y = self.hex_radius * 3 / 2 * offset.z
-        coord_y = coord_y + self.surface.get_height() / 2 + self.__coord_offset_y
+        coord_y += self.surface.get_height() / 2 + self.__coord_offset_y
         return int(coord_x), int(coord_y)
 
     def __draw_coord(self, coord, color):
         Hex.draw_circle(self.surface, self.get_center_position(coord), int(self.hex_width_half), color)
+
+    def is_within(self, pos1, pos2, coord):
+        # We add and subtract half the hex width to give a little bit of selection buffer
+        top_left = min([pos1[0], pos2[0]]) - self.hex_width_half, min([pos1[1], pos2[1]]) - self.hex_width_half
+        bottom_right = max([pos1[0], pos2[0]]) + self.hex_width_half, max([pos1[1], pos2[1]]) + self.hex_width_half
+        coord_center = self.get_center_position(coord)
+        return top_left[0] <= coord_center[0] <= bottom_right[0] and top_left[1] <= coord_center[1] <= bottom_right[1]
