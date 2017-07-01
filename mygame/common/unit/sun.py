@@ -13,6 +13,7 @@ class Sun(Unit):
 
     def __init__(self, unit_id, coord):
         Unit.__init__(self, Sun.TYPE, unit_id, coord)
+        self.movable = False
 
     def draw(self, hexgrid):
         center = hexgrid.get_center_position(self.coord)
