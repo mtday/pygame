@@ -38,5 +38,6 @@ class UnitMgr:
     def handle_events(self, events):
         pass
 
-    def draw(self):
-        pass
+    def draw(self, hexgrid):
+        for unit in self.__units.values():
+            unit.draw(hexgrid)

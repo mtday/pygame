@@ -10,40 +10,40 @@ class UnitMgrTest(unittest.TestCase):
     def test_len(self):
         unitmgr = UnitMgr(None)
         self.assertEqual(len(unitmgr), 0)
-        unitmgr.add(Unit('id1', 'type1', Coord()))
-        unitmgr.add(Unit('id2', 'type2', Coord()))
+        unitmgr.add(Unit('type1', 'id1', Coord()))
+        unitmgr.add(Unit('type2', 'id2', Coord()))
         self.assertEqual(len(unitmgr), 2)
 
     def test_add(self):
         unitmgr = UnitMgr(None)
-        unitmgr.add(Unit('id1', 'type1', Coord()))
-        unitmgr.add(Unit('id2', 'type2', Coord()))
+        unitmgr.add(Unit('type1', 'id1', Coord()))
+        unitmgr.add(Unit('type2', 'id2', Coord()))
         self.assertEqual(len(unitmgr), 2)
         self.assertTrue('id1' in unitmgr)
         self.assertTrue('id2' in unitmgr)
 
     def test_remove(self):
         unitmgr = UnitMgr(None)
-        unitmgr.add(Unit('id1', 'type1', Coord()))
-        unitmgr.add(Unit('id2', 'type2', Coord()))
+        unitmgr.add(Unit('type1', 'id1', Coord()))
+        unitmgr.add(Unit('type2', 'id2', Coord()))
         self.assertEqual(len(unitmgr), 2)
         self.assertTrue('id1' in unitmgr)
         self.assertTrue('id2' in unitmgr)
 
-        unitmgr.remove(Unit('id3', 'type3', Coord()))
+        unitmgr.remove(Unit('type3', 'id3', Coord()))
         self.assertEqual(len(unitmgr), 2)
         self.assertTrue('id1' in unitmgr)
         self.assertTrue('id2' in unitmgr)
 
-        unitmgr.remove(Unit('id1', 'type1', Coord()))
+        unitmgr.remove(Unit('type1', 'id1', Coord()))
         self.assertEqual(len(unitmgr), 1)
         self.assertFalse('id1' in unitmgr)
         self.assertTrue('id2' in unitmgr)
 
     def test_remove_by_id(self):
         unitmgr = UnitMgr(None)
-        unitmgr.add(Unit('id1', 'type1', Coord()))
-        unitmgr.add(Unit('id2', 'type2', Coord()))
+        unitmgr.add(Unit('type1', 'id1', Coord()))
+        unitmgr.add(Unit('type2', 'id2', Coord()))
         self.assertEqual(len(unitmgr), 2)
         self.assertTrue('id1' in unitmgr)
         self.assertTrue('id2' in unitmgr)
@@ -60,21 +60,22 @@ class UnitMgrTest(unittest.TestCase):
 
     def test_get_by_id(self):
         unitmgr = UnitMgr(None)
-        unitmgr.add(Unit('id1', 'type1', Coord()))
-        unitmgr.add(Unit('id2', 'type2', Coord()))
+        unitmgr.add(Unit('type1', 'id1', Coord()))
+        unitmgr.add(Unit('type2', 'id2', Coord()))
 
         missing = unitmgr.get_by_id('missing')
         self.assertIsNone(missing)
 
         unit1 = unitmgr.get_by_id('id1')
+        self.assertIsNotNone(unit1)
         self.assertEqual(unit1.unit_id, 'id1')
         self.assertEqual(unit1.unit_type, 'type1')
 
     def test_get_by_type(self):
         unitmgr = UnitMgr(None)
-        unitmgr.add(Unit('idA', 'type1', Coord()))
-        unitmgr.add(Unit('idB', 'type2', Coord()))
-        unitmgr.add(Unit('idC', 'type1', Coord()))
+        unitmgr.add(Unit('type1', 'idA', Coord()))
+        unitmgr.add(Unit('type2', 'idB', Coord()))
+        unitmgr.add(Unit('type1', 'idC', Coord()))
 
         empty = unitmgr.get_by_type('missing')
         self.assertIsNotNone(empty)

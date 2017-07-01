@@ -1,7 +1,6 @@
 import math
 import pygame
 
-from mygame.client.config.colors import HOVER_HEX_COLOR
 from mygame.client.config.settings import HEX_RADIUS_DEFAULT
 from mygame.client.config.settings import HEX_RADIUS_MAX
 from mygame.client.config.settings import HEX_RADIUS_MID
@@ -105,7 +104,8 @@ class HexGrid:
         self.__draw_hover()
 
     def __draw_hover(self):
-        Hex.draw_circle(self.surface, self.__last_mouse_position, int(self.hex_width_half), HOVER_HEX_COLOR)
+        # Hex.draw_circle(self.surface, self.__last_mouse_position, int(self.hex_width_half), HOVER_HEX_COLOR)
+        pass
 
     def get_center_position(self, coord):
         offset = coord.subtract_coord(self.__center_coord)
