@@ -1,17 +1,37 @@
 
+import socketserver
+import threading
+
+from mygame.server.handler.handler import Handler
+
+
+class Listener(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    pass
+
 
 class Server:
+    HOST = "localhost"
+    PORT = 34455
+
     def __init__(self):
         self.running = False
+        self.server = Listener((Server.HOST, Server.PORT), Handler)
+        self.server_thread = threading.Thread(target=self.server.serve_forever)
+        self.server_thread.setDaemon(True)
 
     def run(self):
         self.running = True
-        while self.running:
-            # TODO
-            pass
+        self.server_thread.start()
+        try:
+            while self.running:
+                pass
+        except KeyboardInterrupt:
+            self.stop()
 
     def stop(self):
         self.running = False
+        self.server.shutdown()
+        self.server.server_close()
 
 
 if __name__ == '__main__':
