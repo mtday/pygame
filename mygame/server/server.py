@@ -5,7 +5,7 @@ import threading
 from mygame.server.handler.handler import Handler
 
 
-class Listener(socketserver.ThreadingMixIn, socketserver.TCPServer):
+class Listener(socketserver.ThreadingMixIn, socketserver.UDPServer):
     pass
 
 
@@ -16,8 +16,7 @@ class Server:
     def __init__(self):
         self.running = False
         self.server = Listener((Server.HOST, Server.PORT), Handler)
-        self.server_thread = threading.Thread(target=self.server.serve_forever)
-        self.server_thread.setDaemon(True)
+        self.server_thread = threading.Thread(target=self.server.serve_forever, daemon=True)
 
     def run(self):
         self.running = True

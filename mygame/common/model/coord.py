@@ -1,4 +1,7 @@
 
+from mygame.common.config.settings import BYTE_ORDER
+
+
 class Coord:
     __directions = [(1, -1, 0), (1, 0, -1), (0, 1, -1), (-1, 1, 0), (-1, 0, 1), (0, -1, 1)]
 
@@ -74,3 +77,13 @@ class Coord:
                 results.append(coord)
                 coord = coord.get_neighbor(i)
         return results
+
+    def write(self, iostream):
+        iostream.write(int(self.x).to_bytes(4, byteorder=BYTE_ORDER, signed=True))
+        iostream.write(int(self.z).to_bytes(4, byteorder=BYTE_ORDER, signed=True))
+
+    @staticmethod
+    def read(iostream):
+        x = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=True)
+        z = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=True)
+        return Coord(x, -x - z, z)

@@ -2,7 +2,11 @@
 import pygame
 
 from mygame.client.config.settings import FPS_TARGET
+from mygame.client.config.settings import SERVER_HOST
+from mygame.client.config.settings import SERVER_PORT
+from mygame.client.io.serverio import ServerIO
 from mygame.client.ui.window import Window
+from mygame.common.msg.login import LoginRequest
 
 
 class Client:
@@ -11,6 +15,7 @@ class Client:
         pygame.mixer.init()
         self.window = Window(self)
         self.clock = pygame.time.Clock()
+        self.serverio = ServerIO(SERVER_HOST, SERVER_PORT)
         self.running = False
 
     def handle_events(self):
@@ -19,10 +24,13 @@ class Client:
 
     def run(self):
         self.running = True
+        self.serverio.listen()
+        self.serverio.send(LoginRequest('user', 'pass'))
         while self.running:
             self.clock.tick(FPS_TARGET)
             self.handle_events()
             self.draw()
+        self.serverio.stop()
         pygame.quit()
 
     def stop(self):

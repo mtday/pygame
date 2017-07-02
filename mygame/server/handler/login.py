@@ -9,6 +9,6 @@ class LoginHandler:
         return msg_type == LoginRequest.TYPE
 
     @staticmethod
-    def handle(request, login_request):
+    def handle(socket, client, login_request):
         print(f'Login request from: {login_request.login}')
-        MessageIO.send(request, LoginResponse(True))
+        MessageIO.write(socket, LoginResponse(True), client)

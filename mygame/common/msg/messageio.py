@@ -1,7 +1,8 @@
 
-from mygame.common.config.settings import BYTE_ENCODING
-from mygame.common.config.settings import BYTE_ORDER
+import io
+
 from mygame.common.msg.login import LoginRequest, LoginResponse
+from mygame.common.msg.message import Message
 
 
 class MessageIO:
@@ -17,33 +18,24 @@ class MessageIO:
         return None
 
     @staticmethod
-    def send(socket, message):
-        MessageIO.send_msg_type(socket, message.msg_type)
-        MessageIO.send_msg_version(socket, message.msg_version)
-        message.send(socket)
+    def write(socket, message, client=None):
+        iostream = io.BytesIO()
+        Message.write(iostream, message)
+        message.write(iostream)
+        if client:
+            socket.sendto(iostream.getvalue(), client)
+        else:
+            socket.sendall(iostream.getvalue())
+        iostream.close()
 
     @staticmethod
-    def recv(socket):
-        msg_type = MessageIO.recv_msg_type(socket)
-        msg_version = MessageIO.recv_msg_version(socket)
+    def read(data):
+        iostream = io.BytesIO(data)
+        (msg_type, msg_version) = Message.read(iostream)
         msg = MessageIO.get_message(msg_type)
         if msg:
-            return msg.recv(socket, msg_version)
+            msg = msg.read(iostream)
         else:
-            return None
-
-    @staticmethod
-    def send_msg_type(socket, msg_type):
-        socket.sendall(bytes(msg_type, BYTE_ENCODING))
-
-    @staticmethod
-    def recv_msg_type(socket):
-        return str(socket.recv(4), BYTE_ENCODING)
-
-    @staticmethod
-    def send_msg_version(socket, msg_version):
-        socket.sendall(int(msg_version).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
-
-    @staticmethod
-    def recv_msg_version(socket):
-        return int.from_bytes(socket.recv(1), byteorder=BYTE_ORDER, signed=False)
+            raise Exception("Invalid message received: '{msg_type}', '{msg_version}'")
+        iostream.close()
+        return msg

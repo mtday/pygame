@@ -1,9 +1,11 @@
 
+from mygame.common.config.settings import BYTE_ENCODING
+from mygame.common.config.settings import BYTE_ORDER
 from mygame.common.msg.message import Message
 
 
 class LoginRequest(Message):
-    TYPE = 'LogQ'
+    TYPE = 'LoginRequest'
     VERSION = 1
 
     def __init__(self, login=None, password=None):
@@ -11,33 +13,35 @@ class LoginRequest(Message):
         self.login = login
         self.password = password
 
-    def send(self, socket):
-        Message.send_text(socket, self.login)
-        Message.send_text(socket, self.password)
+    def write(self, iostream):
+        login_bytes = self.login.encode(BYTE_ENCODING)
+        iostream.write(len(login_bytes).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
+        iostream.write(login_bytes)
+        password_bytes = self.password.encode(BYTE_ENCODING)
+        iostream.write(len(password_bytes).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
+        iostream.write(password_bytes)
 
-    def recv(self, socket, msg_version):
-        if LoginRequest.VERSION == msg_version:
-            login = Message.recv_text(socket)
-            password = Message.recv_text(socket)
-            return LoginRequest(login, password)
-        else:
-            raise Exception(f'Unsupported message version: {msg_version}')
+    @staticmethod
+    def read(iostream):
+        login_len = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
+        login = str(iostream.read(login_len), BYTE_ENCODING)
+        password_len = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
+        password = str(iostream.read(password_len), BYTE_ENCODING)
+        return LoginRequest(login, password)
 
 
 class LoginResponse(Message):
-    TYPE = 'LogS'
+    TYPE = 'LoginResponse'
     VERSION = 1
 
     def __init__(self, success=None):
         super(LoginResponse, self).__init__(LoginResponse.TYPE, LoginResponse.VERSION)
         self.success = success
 
-    def send(self, socket):
-        Message.send_bool(socket, self.success)
+    def write(self, iostream):
+        iostream.write(bool(self.success).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
 
-    def recv(self, socket, msg_version):
-        if LoginResponse.VERSION == msg_version:
-            success = Message.recv_bool(socket)
-            return LoginResponse(success)
-        else:
-            raise Exception(f'Unsupported message version: {msg_version}')
+    @staticmethod
+    def read(iostream):
+        success = bool.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
+        return LoginResponse(success)
