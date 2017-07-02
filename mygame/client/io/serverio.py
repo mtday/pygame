@@ -1,10 +1,11 @@
 
-import pygame
 import select
 import socket
 import threading
 
-from mygame.common.msg.messageio import MessageIO
+import pygame
+
+from mygame.common.io.messageio import MessageIO
 
 
 class ServerIO:

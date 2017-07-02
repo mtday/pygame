@@ -1,5 +1,5 @@
 
-from mygame.common.msg.messageio import MessageIO
+from mygame.common.io.messageio import MessageIO
 from mygame.common.msg.login import LoginRequest, LoginResponse
 
 
