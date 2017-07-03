@@ -9,14 +9,14 @@ from mygame.common.model.unit import Unit
 
 
 class ReconDrone(Unit):
-    TYPE = "RECON_DRONE"
+    TYPE = 'RECON_DRONE'
 
     precomputed_rads = [(math.pi / 180) * (120 * i + 30) for i in range(0, 3)]
     precomputed_cos = [math.cos(rad) for rad in precomputed_rads]
     precomputed_sin = [math.sin(rad) for rad in precomputed_rads]
 
     def __init__(self, unit_id, coord):
-        Unit.__init__(self, ReconDrone.TYPE, unit_id, coord)
+        super(ReconDrone, self).__init__(ReconDrone.TYPE, unit_id, coord)
 
     def draw(self, hexgrid):
         center = hexgrid.get_center_position(self.coord)
@@ -32,3 +32,11 @@ class ReconDrone(Unit):
         center_x, center_y = center
         return (center_x + radius * ReconDrone.precomputed_cos[i],
                 center_y + radius * ReconDrone.precomputed_sin[i])
+
+    @staticmethod
+    def read(iostream, unit_type, unit_id, coord):
+        return ReconDrone(unit_id, coord)
+
+    @staticmethod
+    def write(iostream, unit):
+        pass

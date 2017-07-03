@@ -12,6 +12,6 @@ class MessageTest(unittest.TestCase):
         Message.write(outstream, message)
 
         instream = io.BytesIO(outstream.getvalue())
-        (msg_type, msg_version) = Message.read(instream)
+        (msg_type, msg_version) = Message.read(instream, 0)
         self.assertEqual(msg_type, message.msg_type)
         self.assertEqual(msg_version, message.msg_version)

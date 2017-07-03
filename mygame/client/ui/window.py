@@ -1,15 +1,10 @@
 import pygame
-import random
 
 from mygame.client.config.colors import BLACK
 from mygame.client.config.settings import WINDOW_SIZE_DEFAULT
 from mygame.client.config.settings import WINDOW_TITLE
 from mygame.client.ui.hexgrid import HexGrid
 from mygame.client.ui.unitmgr import UnitMgr
-from mygame.common.model.coord import Coord
-from mygame.common.unit.planet import Planet
-from mygame.common.unit.recon import ReconDrone
-from mygame.common.unit.sun import Sun
 
 
 class Window:
@@ -24,23 +19,6 @@ class Window:
         self.unitmgr = UnitMgr(self.hexgrid)
         # if self.window_settings & pygame.FULLSCREEN:
         #     pygame.mouse.set_visible(False)
-
-        # Add some initial units for testing
-        # TODO: These should come from the server
-        self.unitmgr.add(Sun('id1', Coord()))
-        self.unitmgr.add(Planet('id2', Window.get_random_coord(20)))
-        self.unitmgr.add(ReconDrone('id3', Window.get_random_coord(30)))
-
-    @staticmethod
-    def get_random_coord(max_distance):
-        x = random.randint(-max_distance, max_distance)
-        if abs(x) < 3:
-            x *= 3
-        y = random.randint(-max_distance, max_distance)
-        if abs(y) < 3:
-            y *= 3
-        z = -x - y
-        return Coord(x, y, z)
 
     @staticmethod
     def get_display_mode():

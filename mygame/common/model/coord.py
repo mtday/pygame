@@ -84,6 +84,12 @@ class Coord:
 
     @staticmethod
     def read(iostream):
-        x = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=True)
-        z = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=True)
+        x = int.from_bytes(iostream.read(4), byteorder=BYTE_ORDER, signed=True)
+        z = int.from_bytes(iostream.read(4), byteorder=BYTE_ORDER, signed=True)
         return Coord(x, -x - z, z)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.z == other.z
+
+    def __str__(self):
+        return f'Coord[x={self.x}, y={self.y}, z={self.z}]'

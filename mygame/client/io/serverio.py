@@ -22,6 +22,7 @@ class ServerIO:
         self.listener_thread.start()
 
     def send(self, message):
+        print(f'Sending: {message}')
         MessageIO.write(self.sock, message)
 
     def receive(self):
@@ -34,6 +35,7 @@ class ServerIO:
                     if data:
                         message = MessageIO.read(data)
                         if message:
+                            print(f'Received: {message}')
                             pygame.event.post(pygame.event.Event(pygame.USEREVENT, {'msg': message}))
                 for s in except_ready:
                     print(f'Exception with socket, reconnecting')

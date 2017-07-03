@@ -6,7 +6,9 @@ from mygame.client.config.settings import SERVER_HOST
 from mygame.client.config.settings import SERVER_PORT
 from mygame.client.io.serverio import ServerIO
 from mygame.client.ui.window import Window
+from mygame.common.model.coord import Coord
 from mygame.common.msg.login import LoginRequest
+from mygame.common.msg.unit import UnitRequest
 
 
 class Client:
@@ -25,7 +27,9 @@ class Client:
     def run(self):
         self.running = True
         self.serverio.listen()
+        # TODO: When do these happen?
         self.serverio.send(LoginRequest('user', 'pass'))
+        self.serverio.send(UnitRequest(Coord(), 100))
         while self.running:
             self.clock.tick(FPS_TARGET)
             self.handle_events()

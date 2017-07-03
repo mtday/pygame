@@ -1,6 +1,8 @@
 
 import pygame
 
+from mygame.common.msg.unit import UnitResponse
+
 
 class UnitMgr:
     def __init__(self, hexgrid):
@@ -67,6 +69,13 @@ class UnitMgr:
                         unit.selected = True
                 self.__mouse_button = None
                 self.__mouse_down_position = None
+            elif event.type == pygame.USEREVENT:
+                print(f'Handling user event type: {event.msg.msg_type}')
+                if event.msg.msg_type == UnitResponse.TYPE:
+                    print(f'  Message: {event.msg}')
+                    for unit in event.msg.units:
+                        print(f'    Unit: {unit.unit_type}, {unit.unit_id}, {unit.coord}')
+                        self.add(unit)
 
     def draw(self):
         for unit in self.__units.values():
