@@ -1,4 +1,7 @@
 
+import logging
+import logging.config
+import os
 import pygame
 
 from mygame.client.config.settings import FPS_TARGET
@@ -13,6 +16,8 @@ from mygame.common.msg.unit import UnitRequest
 
 class Client:
     def __init__(self):
+        logging.config.fileConfig(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logging.ini'))
+        self.log = logging.getLogger(__name__)
         pygame.init()
         pygame.mixer.init()
         self.window = Window(self)
@@ -25,6 +30,7 @@ class Client:
         self.window.handle_events(events)
 
     def run(self):
+        self.log.info('Client running')
         self.running = True
         self.serverio.listen()
         # TODO: When do these happen?
@@ -38,6 +44,7 @@ class Client:
         pygame.quit()
 
     def stop(self):
+        self.log.info('Client stopping')
         self.running = False
 
     def draw(self):

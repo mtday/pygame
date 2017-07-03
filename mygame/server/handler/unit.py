@@ -1,4 +1,4 @@
-
+import logging
 import random
 
 from mygame.common.io.messageio import MessageIO
@@ -10,13 +10,17 @@ from mygame.common.unit.sun import Sun
 
 
 class UnitHandler:
+    LOG = logging.getLogger(__name__)
+
     @staticmethod
     def accept(msg_type):
         return msg_type == UnitRequest.TYPE
 
     @staticmethod
     def handle(socket, client, unit_request):
-        print(f'Unit request for location: {unit_request.coord} and distance {unit_request.distance}')
+        UnitHandler.LOG.debug('Handling unit request from coord %s with distance %d',
+                              str(unit_request.coord), unit_request.distance)
+        # TODO retrieve these from a backing store
         sun = Sun('sun', Coord(0, 0, 0))
         planet = Planet('planet', UnitHandler.get_random_coord(20))
         recon = ReconDrone('recon', UnitHandler.get_random_coord(30))

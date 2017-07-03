@@ -1,4 +1,5 @@
 
+import logging
 import socketserver
 
 from mygame.common.io.messageio import MessageIO
@@ -14,12 +15,15 @@ class Handler(socketserver.BaseRequestHandler):
         UnitRequest.TYPE: UnitHandler
     }
 
+    def __init__(self, request, client_address, server):
+        super(Handler, self).__init__(request, client_address, server)
+        self.log = logging.getLogger(__name__)
+
     def handle(self):
         (data, socket) = self.request
         msg = MessageIO.read(data)
 
         if not msg:
-            raise Exception(f'Unrecognized message type: {msg.msg_type}')
-
-        if msg.msg_type in Handler.HANDLERS:
+            self.log.warning('Ignoring unrecognized message type')
+        elif msg.msg_type in Handler.HANDLERS:
             Handler.HANDLERS[msg.msg_type].handle(socket, self.client_address, msg)
