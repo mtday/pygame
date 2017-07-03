@@ -17,7 +17,6 @@ class Server:
     PORT = 34455
 
     def __init__(self):
-        logging.config.fileConfig(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logging.ini'))
         self.log = logging.getLogger(__name__)
         self.running = False
         self.server = Listener((Server.HOST, Server.PORT), Handler)
@@ -41,4 +40,5 @@ class Server:
 
 
 if __name__ == '__main__':
+    logging.config.fileConfig(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logging.ini'))
     Server().run()

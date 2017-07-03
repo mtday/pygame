@@ -25,20 +25,20 @@ class HandlerManager:
 
 
 class Handler(socketserver.BaseRequestHandler):
-    LOG = logging.getLogger(__name__)
     MGR = HandlerManager()
 
     def __init__(self, request, client_address, server):
         super(Handler, self).__init__(request, client_address, server)
 
     def handle(self):
+        log = logging.getLogger(__name__)
         (data, socket) = self.request
         msg = MessageIO.read(data)
 
         if not msg:
-            Handler.LOG.warning('Ignoring unrecognized message type')
+            log.warning('Ignoring unrecognized message type')
         else:
-            Handler.LOG.info('Received message: {msg.msg_type}')
+            log.info(f'Received message: {msg.msg_type}')
             handler = Handler.MGR.get_handler(msg.msg_type)
             if handler:
                 handler.handle(socket, self.client_address, msg)

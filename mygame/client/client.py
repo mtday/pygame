@@ -16,7 +16,6 @@ from mygame.common.msg.unit import UnitRequest
 
 class Client:
     def __init__(self):
-        logging.config.fileConfig(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logging.ini'))
         self.log = logging.getLogger(__name__)
         pygame.init()
         pygame.mixer.init()
@@ -52,4 +51,5 @@ class Client:
 
 
 if __name__ == '__main__':
+    logging.config.fileConfig(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logging.ini'))
     Client().run()
