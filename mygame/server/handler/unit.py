@@ -10,16 +10,17 @@ from mygame.common.unit.sun import Sun
 
 
 class UnitHandler:
-    LOG = logging.getLogger(__name__)
+    def __init__(self, db):
+        self.log = logging.getLogger(__name__)
+        self.db = db
 
     @staticmethod
     def accept(msg_type):
         return msg_type == UnitRequest.TYPE
 
-    @staticmethod
-    def handle(socket, client, unit_request):
-        UnitHandler.LOG.debug('Handling unit request from coord %s with distance %d',
-                              str(unit_request.coord), unit_request.distance)
+    def handle(self, socket, client, unit_request):
+        self.log.info('Handling unit request from coord %s with distance %d',
+                      str(unit_request.coord), unit_request.distance)
         # TODO retrieve these from a backing store
         sun = Sun('sun', Coord(0, 0, 0))
         planet = Planet('planet', UnitHandler.get_random_coord(20))

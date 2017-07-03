@@ -16,6 +16,6 @@ setup(
     author_email='mday@eitccorp.com',
     url='https://github.com/mtday/mygame',
     license=license_file,
-    install_requires=['pygame'],
+    install_requires=['pygame', 'psycopg2', 'sqlalchemy'],
     packages=find_packages(exclude=('tests', 'docs'))
 )
