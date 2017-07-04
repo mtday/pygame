@@ -1,4 +1,3 @@
-
 import io
 import unittest
 
@@ -11,7 +10,7 @@ class LoginTest(unittest.TestCase):
         LoginRequest('user', 'pass').write(outstream)
 
         instream = io.BytesIO(outstream.getvalue())
-        request = LoginRequest.read(instream, LoginRequest.VERSION)
+        request = LoginRequest.read(instream)
 
         self.assertEqual(request.login, 'user')
         self.assertEqual(request.password, 'pass')
@@ -21,7 +20,7 @@ class LoginTest(unittest.TestCase):
         LoginResponse(True).write(outstream)
 
         instream = io.BytesIO(outstream.getvalue())
-        response = LoginResponse.read(instream, LoginResponse.VERSION)
+        response = LoginResponse.read(instream)
 
         self.assertEqual(response.success, True)
 
@@ -30,6 +29,6 @@ class LoginTest(unittest.TestCase):
         LoginResponse(False).write(outstream)
 
         instream = io.BytesIO(outstream.getvalue())
-        response = LoginResponse.read(instream, LoginResponse.VERSION)
+        response = LoginResponse.read(instream)
 
         self.assertEqual(response.success, False)

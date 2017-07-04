@@ -3,6 +3,7 @@ import io
 import unittest
 
 from mygame.common.model.coord import Coord
+from mygame.common.model.unitinfo import UnitInfo
 from mygame.common.msg.unit import UnitRequest, UnitResponse
 from mygame.common.unit.planet import Planet
 from mygame.common.unit.recon import ReconDrone
@@ -15,7 +16,7 @@ class UnitTest(unittest.TestCase):
         UnitRequest(Coord(1, 2, -3), 10).write(outstream)
 
         instream = io.BytesIO(outstream.getvalue())
-        request = UnitRequest.read(instream, UnitRequest.VERSION)
+        request = UnitRequest.read(instream)
 
         self.assertEqual(request.coord, Coord(1, 2, -3))
         self.assertEqual(request.distance, 10)
@@ -25,20 +26,20 @@ class UnitTest(unittest.TestCase):
         UnitResponse([]).write(outstream)
 
         instream = io.BytesIO(outstream.getvalue())
-        response = UnitResponse.read(instream, UnitResponse.VERSION)
+        response = UnitResponse.read(instream)
 
         self.assertIsNotNone(response.units)
         self.assertEqual(len(response.units), 0)
 
     def test_response_nonempty_write_read(self):
         outstream = io.BytesIO()
-        a = Sun('a', Coord(1, 2, -3))
-        b = Planet('b', Coord(1, -2, 1))
-        c = ReconDrone('c', Coord(2, -3, 1))
+        a = Sun(UnitInfo(10, 1, 1, Coord(1, 2, -3)))
+        b = Planet(UnitInfo(11, 1, 1, Coord(1, -2, 1)))
+        c = ReconDrone(UnitInfo(12, 1, 1, Coord(2, -3, 1)))
         UnitResponse([a, b, c]).write(outstream)
 
         instream = io.BytesIO(outstream.getvalue())
-        response = UnitResponse.read(instream, UnitResponse.VERSION)
+        response = UnitResponse.read(instream)
 
         self.assertIsNotNone(response.units)
         self.assertEqual(len(response.units), 3)

@@ -3,6 +3,7 @@ from mygame.common.config.settings import BYTE_ORDER
 
 
 class Coord:
+    VERSION = 1
     __directions = [(1, -1, 0), (1, 0, -1), (0, 1, -1), (-1, 1, 0), (-1, 0, 1), (0, -1, 1)]
 
     def __init__(self, x=0, y=0, z=0):
@@ -78,15 +79,20 @@ class Coord:
                 coord = coord.get_neighbor(i)
         return results
 
-    def write(self, iostream):
-        iostream.write(int(self.x).to_bytes(4, byteorder=BYTE_ORDER, signed=True))
-        iostream.write(int(self.z).to_bytes(4, byteorder=BYTE_ORDER, signed=True))
-
     @staticmethod
     def read(iostream):
-        x = int.from_bytes(iostream.read(4), byteorder=BYTE_ORDER, signed=True)
-        z = int.from_bytes(iostream.read(4), byteorder=BYTE_ORDER, signed=True)
-        return Coord(x, -x - z, z)
+        version = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
+        if version == 1:
+            x = int.from_bytes(iostream.read(4), byteorder=BYTE_ORDER, signed=True)
+            z = int.from_bytes(iostream.read(4), byteorder=BYTE_ORDER, signed=True)
+            return Coord(x, -x - z, z)
+        else:
+            raise Exception(f'Unsupported serialization version: {version}')
+
+    def write(self, iostream):
+        iostream.write(Coord.VERSION.to_bytes(1, byteorder=BYTE_ORDER, signed=False))
+        iostream.write(int(self.x).to_bytes(4, byteorder=BYTE_ORDER, signed=True))
+        iostream.write(int(self.z).to_bytes(4, byteorder=BYTE_ORDER, signed=True))
 
     def __eq__(self, other):
         return self.x == other.x and self.z == other.z

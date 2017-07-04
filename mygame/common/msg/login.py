@@ -9,22 +9,24 @@ class LoginRequest(Message):
     VERSION = 1
 
     def __init__(self, login, password):
-        super(LoginRequest, self).__init__(LoginRequest.TYPE, LoginRequest.VERSION)
+        super(LoginRequest, self).__init__(LoginRequest.TYPE)
         self.login = login
         self.password = password
 
     @staticmethod
-    def read(iostream, msg_version=None):
-        if msg_version == LoginRequest.VERSION:
+    def read(iostream):
+        version = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
+        if version == 1:
             login_len = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
             login = str(iostream.read(login_len), BYTE_ENCODING)
             password_len = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
             password = str(iostream.read(password_len), BYTE_ENCODING)
             return LoginRequest(login, password)
         else:
-            raise Exception(f'Unsupported version number: {msg_version}')
+            raise Exception(f'Unsupported version number: {version}')
 
     def write(self, iostream):
+        iostream.write(LoginRequest.VERSION.to_bytes(1, byteorder=BYTE_ORDER, signed=False))
         login_bytes = self.login.encode(BYTE_ENCODING)
         iostream.write(len(login_bytes).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
         iostream.write(login_bytes)
@@ -38,16 +40,18 @@ class LoginResponse(Message):
     VERSION = 1
 
     def __init__(self, success):
-        super(LoginResponse, self).__init__(LoginResponse.TYPE, LoginResponse.VERSION)
+        super(LoginResponse, self).__init__(LoginResponse.TYPE)
         self.success = success
 
     @staticmethod
-    def read(iostream, msg_version):
-        if msg_version == LoginResponse.VERSION:
+    def read(iostream):
+        version = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
+        if version == 1:
             success = bool.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
             return LoginResponse(success)
         else:
-            raise Exception(f'Unsupported version number: {msg_version}')
+            raise Exception(f'Unsupported version number: {version}')
 
     def write(self, iostream):
+        iostream.write(LoginResponse.VERSION.to_bytes(1, byteorder=BYTE_ORDER, signed=False))
         iostream.write(bool(self.success).to_bytes(1, byteorder=BYTE_ORDER, signed=False))

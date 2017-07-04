@@ -27,11 +27,13 @@ CREATE TABLE games (
 CREATE TABLE units (
     id                SERIAL         NOT NULL,
     user_id           INTEGER        NOT NULL,
+    game_id           INTEGER        NOT NULL,
     type              VARCHAR(30)    NOT NULL,
     coord_x           INTEGER        NOT NULL,
     coord_z           INTEGER        NOT NULL,
 
     CONSTRAINT units_pk PRIMARY KEY (id),
-    CONSTRAINT units_fk_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    CONSTRAINT units_fk_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT units_fk_game_id FOREIGN KEY (game_id) REFERENCES games (id) ON DELETE CASCADE
 );
 

@@ -1,12 +1,13 @@
-
 import io
 
+from mygame.common.config.settings import BYTE_ENCODING
+from mygame.common.config.settings import BYTE_ORDER
 from mygame.common.msg.login import LoginRequest, LoginResponse
 from mygame.common.msg.unit import UnitRequest, UnitResponse
-from mygame.common.msg.message import Message
 
 
 class MessageIO:
+    VERSION = 1
     TYPES = {
         LoginRequest.TYPE: LoginRequest,
         LoginResponse.TYPE: LoginResponse,
@@ -23,22 +24,30 @@ class MessageIO:
     @staticmethod
     def read(data):
         iostream = io.BytesIO(data)
-        (msg_type, msg_version) = Message.read(iostream, 0)
-        msg = MessageIO.get_message(msg_type)
-        if msg:
-            msg = msg.read(iostream, msg_version)
+        version = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
+        if version == 1:
+            msg_type_len = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
+            msg_type = str(iostream.read(msg_type_len), BYTE_ENCODING)
+            msg = MessageIO.get_message(msg_type)
+            if msg:
+                return msg.read(iostream)
+            else:
+                raise Exception("Invalid message received: '{msg_type}', '{msg_version}'")
         else:
-            raise Exception("Invalid message received: '{msg_type}', '{msg_version}'")
-        iostream.close()
-        return msg
+            raise Exception(f'Unsupported serialization version: {version}')
 
     @staticmethod
     def write(socket, message, client=None):
         iostream = io.BytesIO()
-        Message.write(iostream, message)
+        iostream.write(int(MessageIO.VERSION).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
+        msg_type_bytes = message.msg_type.encode(BYTE_ENCODING)
+        iostream.write(len(msg_type_bytes).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
+        iostream.write(msg_type_bytes)
         message.write(iostream)
+        data = iostream.getvalue()
         if client:
-            socket.sendto(iostream.getvalue(), client)
+            socket.sendto(data, client)
         else:
-            socket.sendall(iostream.getvalue())
+            socket.sendall(data)
         iostream.close()
+

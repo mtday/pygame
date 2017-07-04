@@ -1,14 +1,12 @@
-
 from mygame.common.config.settings import BYTE_ENCODING
 from mygame.common.config.settings import BYTE_ORDER
-from mygame.common.model.coord import Coord
-from mygame.common.model.unit import Unit
 from mygame.common.unit.planet import Planet
 from mygame.common.unit.recon import ReconDrone
 from mygame.common.unit.sun import Sun
 
 
 class UnitFactory:
+    VERSION = 1
     TYPES = {
         Planet.TYPE: Planet,
         ReconDrone.TYPE: ReconDrone,
@@ -23,14 +21,21 @@ class UnitFactory:
 
     @staticmethod
     def read(iostream):
-        (unit_type, unit_id, coord) = Unit.read(iostream, None, None, None)
-        unit = UnitFactory.get_unit(unit_type)
-        if unit:
-            return unit.read(iostream, unit_type, unit_id, coord)
+        version = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
+        if version == 1:
+            unit_type_len = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
+            unit_type = str(iostream.read(unit_type_len), BYTE_ENCODING)
+            unit = UnitFactory.get_unit(unit_type)
+            if unit:
+                return unit.read(iostream)
+            else:
+                raise Exception('Invalid unit received: {unit_type}')
         else:
-            raise Exception("Invalid unit received: '{unit_type}', '{unit_id}'")
+            raise Exception(f'Unsupported serialization version: {version}')
 
     @staticmethod
     def write(iostream, unit):
-        Unit.write(iostream, unit)
-        unit.write(iostream, unit)
+        iostream.write(UnitFactory.VERSION.to_bytes(1, byteorder=BYTE_ORDER, signed=False))
+        iostream.write(len(unit.unit_type).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
+        iostream.write(bytes(unit.unit_type, BYTE_ENCODING))
+        unit.write(iostream)

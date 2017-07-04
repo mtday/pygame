@@ -23,14 +23,14 @@ class UnitMgr:
         return unit_id in self.__units
 
     def contains(self, unit):
-        return unit.unit_id in self.__units
+        return unit.unit_info.unit_id in self.__units
 
     def add(self, unit):
-        self.__units[unit.unit_id] = unit
+        self.__units[unit.unit_info.unit_id] = unit
 
     def remove(self, unit):
-        if unit.unit_id in self.__units:
-            del self.__units[unit.unit_id]
+        if unit.unit_info.unit_id in self.__units:
+            del self.__units[unit.unit_info.unit_id]
 
     def remove_by_id(self, unit_id):
         if unit_id in self.__units:
@@ -47,7 +47,7 @@ class UnitMgr:
         return [unit for unit in self.__units.values() if unit.selected == selected]
 
     def get_within(self, pos1, pos2):
-        return [unit for unit in self.__units.values() if self.hexgrid.is_within(pos1, pos2, unit.coord)]
+        return [unit for unit in self.__units.values() if self.hexgrid.is_within(pos1, pos2, unit.unit_info.coord)]
 
     def handle_events(self, events):
         for event in events:

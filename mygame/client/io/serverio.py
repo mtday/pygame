@@ -1,4 +1,5 @@
 
+import logging
 import select
 import socket
 import threading
@@ -10,6 +11,7 @@ from mygame.common.io.messageio import MessageIO
 
 class ServerIO:
     def __init__(self, host, port):
+        self.log = logging.getLogger(__name__)
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -36,7 +38,7 @@ class ServerIO:
                         if message:
                             pygame.event.post(pygame.event.Event(pygame.USEREVENT, {'msg': message}))
                 for s in except_ready:
-                    print(f'Exception with socket, reconnecting')
+                    self.log.warning('Exception with connection to server, reconnecting')
                     s.close()
                     s.connect((self.host, self.port))
         except KeyboardInterrupt:
