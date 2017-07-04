@@ -1,8 +1,9 @@
 
 import logging
 
-from mygame.common.io.messageio import MessageIO
-from mygame.common.msg.login import LoginRequest, LoginResponse
+from mygame.common.msg.loginrequest import LoginRequest
+from mygame.common.msg.loginresponse import LoginResponse
+from mygame.common.msg.messagefactory import MessageFactory
 
 
 class LoginHandler:
@@ -19,4 +20,4 @@ class LoginHandler:
         log.info('Handling login request from: %s', login_request.login)
 
         user = self.db.users.get_by_login(login_request.login)
-        MessageIO.write(socket, LoginResponse(user is not None), client)
+        MessageFactory.write(socket, LoginResponse(user is not None), client)

@@ -6,7 +6,7 @@ import threading
 
 import pygame
 
-from mygame.common.io.messageio import MessageIO
+from mygame.common.msg.messagefactory import MessageFactory
 
 
 class ServerIO:
@@ -24,7 +24,7 @@ class ServerIO:
         self.listener_thread.start()
 
     def send(self, message):
-        MessageIO.write(self.sock, message)
+        MessageFactory.write(self.sock, message)
 
     def receive(self):
         self.receiving = True
@@ -34,7 +34,7 @@ class ServerIO:
                 for s in input_ready:
                     (data, server) = s.recvfrom(4096)
                     if data:
-                        message = MessageIO.read(data)
+                        message = MessageFactory.read(data)
                         if message:
                             pygame.event.post(pygame.event.Event(pygame.USEREVENT, {'msg': message}))
                 for s in except_ready:

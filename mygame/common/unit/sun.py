@@ -17,6 +17,10 @@ class Sun(Unit):
         super(Sun, self).__init__(Sun.TYPE, unit_info)
         self.movable = False
 
+    def get_actions(self, clicked_coord, clicked_unit):
+        # The sun has no actions that it performs.
+        return []
+
     def draw(self, hexgrid):
         center = hexgrid.get_center_position(self.unit_info.coord)
         pygame.gfxdraw.filled_circle(hexgrid.surface, center[0], center[1],

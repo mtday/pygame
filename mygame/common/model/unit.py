@@ -7,6 +7,9 @@ class Unit:
         self.movable = True
         self.selected = False
 
+    def get_actions(self, clicked_coord, clicked_unit):
+        pass
+
     def draw(self, hexgrid):
         pass
 

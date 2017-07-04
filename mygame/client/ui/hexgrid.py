@@ -59,14 +59,7 @@ class HexGrid:
     def __set_mouse_position(self, position):
         # Save the position so we can fix the hover coordinate after zoom changes.
         self.__last_mouse_position = position
-        position_x, position_y = position
-        # Update the given positions based on the concept of 0, 0 being in the middle.
-        mouse_x = position_x - self.surface.get_width() / 2 - self.__coord_offset_x
-        mouse_y = position_y - self.surface.get_height() / 2 - self.__coord_offset_y
-        # Determine the coordinate associated with the current mouse position.
-        coord_x = (mouse_x * HexGrid.precomputed_sqrt3 / 3 - mouse_y / 3) / self.hex_radius
-        coord_z = mouse_y * 2 / 3 / self.hex_radius
-        self.__hover_coord = Coord(coord_x, -coord_x - coord_z, coord_z).add_coord(self.__center_coord)
+        self.__hover_coord = self.get_coord(position)
 
     def __move_grid(self, offset):
         self.__coord_offset_x = self.__coord_offset_x - offset[0]
@@ -126,6 +119,16 @@ class HexGrid:
         coord_y = self.hex_radius * 3 / 2 * offset.z
         coord_y += self.surface.get_height() / 2 + self.__coord_offset_y
         return int(coord_x), int(coord_y)
+
+    def get_coord(self, position):
+        position_x, position_y = position
+        # Update the given position based on the coordinate in the middle of the screen.
+        mouse_x = position_x - self.surface.get_width() / 2 - self.__coord_offset_x
+        mouse_y = position_y - self.surface.get_height() / 2 - self.__coord_offset_y
+        # Determine the coordinate associated with the current mouse position.
+        coord_x = (mouse_x * HexGrid.precomputed_sqrt3 / 3 - mouse_y / 3) / self.hex_radius
+        coord_z = mouse_y * 2 / 3 / self.hex_radius
+        return Coord(coord_x, -coord_x - coord_z, coord_z).add_coord(self.__center_coord)
 
     def __draw_coord(self, coord, color):
         Hex.draw_circle(self.surface, self.get_center_position(coord), int(self.hex_width_half), color)

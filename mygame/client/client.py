@@ -10,8 +10,8 @@ from mygame.client.config.settings import SERVER_PORT
 from mygame.client.io.serverio import ServerIO
 from mygame.client.ui.window import Window
 from mygame.common.model.coord import Coord
-from mygame.common.msg.login import LoginRequest
-from mygame.common.msg.unit import UnitRequest
+from mygame.common.msg.loginrequest import LoginRequest
+from mygame.common.msg.unitrequest import UnitRequest
 
 
 class Client:

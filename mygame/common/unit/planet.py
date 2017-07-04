@@ -17,6 +17,10 @@ class Planet(Unit):
         super(Planet, self).__init__(Planet.TYPE, unit_info)
         self.movable = False
 
+    def get_actions(self, clicked_coord, clicked_unit):
+        # Planets have no actions that it performs.
+        return []
+
     def draw(self, hexgrid):
         center = hexgrid.get_center_position(self.unit_info.coord)
         pygame.gfxdraw.filled_circle(hexgrid.surface, center[0], center[1],

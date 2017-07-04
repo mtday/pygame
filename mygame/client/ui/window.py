@@ -4,6 +4,7 @@ from mygame.client.config.colors import BLACK
 from mygame.client.config.settings import WINDOW_SIZE_DEFAULT
 from mygame.client.config.settings import WINDOW_TITLE
 from mygame.client.ui.hexgrid import HexGrid
+from mygame.client.ui.menu import Menu
 from mygame.client.ui.unitmgr import UnitMgr
 
 
@@ -16,7 +17,8 @@ class Window:
         # self.screen = pygame.display.set_mode(Window.get_display_mode(), self.window_settings)
         pygame.display.set_caption(WINDOW_TITLE)
         self.hexgrid = HexGrid(self.screen)
-        self.unitmgr = UnitMgr(self.hexgrid)
+        self.menu = Menu(self.hexgrid)
+        self.unitmgr = UnitMgr(self.hexgrid, self.menu)
         # if self.window_settings & pygame.FULLSCREEN:
         #     pygame.mouse.set_visible(False)
 
@@ -44,4 +46,5 @@ class Window:
         self.screen.fill(BLACK)
         self.hexgrid.draw()
         self.unitmgr.draw()
+        self.menu.draw()
         pygame.display.flip()

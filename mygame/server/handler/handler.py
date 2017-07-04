@@ -2,12 +2,12 @@
 import logging
 import socketserver
 
-from mygame.common.io.messageio import MessageIO
-from mygame.common.msg.login import LoginRequest
-from mygame.common.msg.unit import UnitRequest
+from mygame.common.msg.loginrequest import LoginRequest
+from mygame.common.msg.messagefactory import MessageFactory
+from mygame.common.msg.unitrequest import UnitRequest
 from mygame.server.db.db import Db
-from mygame.server.handler.login import LoginHandler
-from mygame.server.handler.unit import UnitHandler
+from mygame.server.handler.loginhandler import LoginHandler
+from mygame.server.handler.unithandler import UnitHandler
 
 
 class HandlerManager:
@@ -33,7 +33,7 @@ class Handler(socketserver.BaseRequestHandler):
     def handle(self):
         log = logging.getLogger(__name__)
         (data, socket) = self.request
-        msg = MessageIO.read(data)
+        msg = MessageFactory.read(data)
 
         if not msg:
             log.warning('Ignoring unrecognized message type')

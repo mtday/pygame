@@ -1,8 +1,9 @@
 
 import logging
 
-from mygame.common.io.messageio import MessageIO
-from mygame.common.msg.unit import UnitRequest, UnitResponse
+from mygame.common.msg.messagefactory import MessageFactory
+from mygame.common.msg.unitrequest import UnitRequest
+from mygame.common.msg.unitresponse import UnitResponse
 
 
 class UnitHandler:
@@ -20,4 +21,4 @@ class UnitHandler:
                  str(unit_request.coord), unit_request.distance)
 
         units = self.db.units.get_for_game(1)
-        MessageIO.write(socket, UnitResponse(units), client)
+        MessageFactory.write(socket, UnitResponse(units), client)

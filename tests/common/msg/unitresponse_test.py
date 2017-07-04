@@ -4,23 +4,13 @@ import unittest
 
 from mygame.common.model.coord import Coord
 from mygame.common.model.unitinfo import UnitInfo
-from mygame.common.msg.unit import UnitRequest, UnitResponse
+from mygame.common.msg.unitresponse import UnitResponse
 from mygame.common.unit.planet import Planet
 from mygame.common.unit.recon import ReconDrone
 from mygame.common.unit.sun import Sun
 
 
-class UnitTest(unittest.TestCase):
-    def test_request_write_read(self):
-        outstream = io.BytesIO()
-        UnitRequest(Coord(1, 2, -3), 10).write(outstream)
-
-        instream = io.BytesIO(outstream.getvalue())
-        request = UnitRequest.read(instream)
-
-        self.assertEqual(request.coord, Coord(1, 2, -3))
-        self.assertEqual(request.distance, 10)
-
+class UnitResponseTest(unittest.TestCase):
     def test_response_empty_write_read(self):
         outstream = io.BytesIO()
         UnitResponse([]).write(outstream)

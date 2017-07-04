@@ -1,6 +1,7 @@
 
 import unittest
 
+from mygame.client.ui.menu import Menu
 from mygame.client.ui.unitmgr import UnitMgr
 from mygame.common.model.coord import Coord
 from mygame.common.model.unit import Unit
@@ -9,14 +10,14 @@ from mygame.common.model.unitinfo import UnitInfo
 
 class UnitMgrTest(unittest.TestCase):
     def test_len(self):
-        unitmgr = UnitMgr(None)
+        unitmgr = UnitMgr(None, Menu(None))
         self.assertEqual(len(unitmgr), 0)
         unitmgr.add(Unit('type1', UnitInfo(1, 1, 1, Coord())))
         unitmgr.add(Unit('type2', UnitInfo(2, 1, 1, Coord())))
         self.assertEqual(len(unitmgr), 2)
 
     def test_add(self):
-        unitmgr = UnitMgr(None)
+        unitmgr = UnitMgr(None, Menu(None))
         unitmgr.add(Unit('type1', UnitInfo(1, 1, 1, Coord())))
         unitmgr.add(Unit('type2', UnitInfo(2, 1, 1, Coord())))
         self.assertEqual(len(unitmgr), 2)
@@ -24,7 +25,7 @@ class UnitMgrTest(unittest.TestCase):
         self.assertTrue(2 in unitmgr)
 
     def test_remove(self):
-        unitmgr = UnitMgr(None)
+        unitmgr = UnitMgr(None, Menu(None))
         unitmgr.add(Unit('type1', UnitInfo(1, 1, 1, Coord())))
         unitmgr.add(Unit('type2', UnitInfo(2, 1, 1, Coord())))
         self.assertEqual(len(unitmgr), 2)
@@ -42,7 +43,7 @@ class UnitMgrTest(unittest.TestCase):
         self.assertTrue(2 in unitmgr)
 
     def test_remove_by_id(self):
-        unitmgr = UnitMgr(None)
+        unitmgr = UnitMgr(None, Menu(None))
         unitmgr.add(Unit('type1', UnitInfo(1, 1, 1, Coord())))
         unitmgr.add(Unit('type2', UnitInfo(2, 1, 1, Coord())))
         self.assertEqual(len(unitmgr), 2)
@@ -60,7 +61,7 @@ class UnitMgrTest(unittest.TestCase):
         self.assertTrue(2 in unitmgr)
 
     def test_get_by_id(self):
-        unitmgr = UnitMgr(None)
+        unitmgr = UnitMgr(None, Menu(None))
         unitmgr.add(Unit('type1', UnitInfo(1, 1, 1, Coord())))
         unitmgr.add(Unit('type2', UnitInfo(2, 1, 1, Coord())))
 
@@ -73,7 +74,7 @@ class UnitMgrTest(unittest.TestCase):
         self.assertEqual(unit1.unit_info.unit_id, 1)
 
     def test_get_by_type(self):
-        unitmgr = UnitMgr(None)
+        unitmgr = UnitMgr(None, Menu(None))
         unitmgr.add(Unit('type1', UnitInfo(1, 1, 1, Coord())))
         unitmgr.add(Unit('type2', UnitInfo(2, 1, 1, Coord())))
         unitmgr.add(Unit('type1', UnitInfo(3, 1, 1, Coord())))
@@ -94,7 +95,7 @@ class UnitMgrTest(unittest.TestCase):
         self.assertEqual(2, type2[0].unit_info.unit_id)
 
     def test_get_selected_default(self):
-        unitmgr = UnitMgr(None)
+        unitmgr = UnitMgr(None, Menu(None))
         a = Unit('type1', UnitInfo(1, 1, 1, Coord()))
         b = Unit('type2', UnitInfo(2, 1, 1, Coord()))
         unitmgr.add(a)
@@ -112,7 +113,7 @@ class UnitMgrTest(unittest.TestCase):
         self.assertEqual(sel[0].unit_info.unit_id, a.unit_info.unit_id)
 
     def test_get_selected_true(self):
-        unitmgr = UnitMgr(None)
+        unitmgr = UnitMgr(None, Menu(None))
         a = Unit('type1', UnitInfo(1, 1, 1, Coord()))
         b = Unit('type2', UnitInfo(2, 1, 1, Coord()))
         unitmgr.add(a)
@@ -130,7 +131,7 @@ class UnitMgrTest(unittest.TestCase):
         self.assertEqual(sel[0].unit_info.unit_id, a.unit_info.unit_id)
 
     def test_get_selected_false(self):
-        unitmgr = UnitMgr(None)
+        unitmgr = UnitMgr(None, Menu(None))
         a = Unit('type1', UnitInfo(1, 1, 1, Coord()))
         b = Unit('type2', UnitInfo(2, 1, 1, Coord()))
         unitmgr.add(a)

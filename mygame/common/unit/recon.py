@@ -4,6 +4,7 @@ import pygame.gfxdraw
 
 from mygame.client.config.colors import SELECTED_UNIT_OUTLINE_COLOR
 from mygame.client.config.colors import UNIT_RECON_DRONE_OUTLINE_COLOR
+from mygame.client.ui.action.move import Move
 from mygame.common.config.settings import BYTE_ORDER
 from mygame.common.model.unit import Unit
 from mygame.common.model.unitinfo import UnitInfo
@@ -19,6 +20,9 @@ class ReconDrone(Unit):
 
     def __init__(self, unit_info):
         super(ReconDrone, self).__init__(ReconDrone.TYPE, unit_info)
+
+    def get_actions(self, clicked_coord, clicked_unit):
+        return [Move()]
 
     def draw(self, hexgrid):
         center = hexgrid.get_center_position(self.unit_info.coord)

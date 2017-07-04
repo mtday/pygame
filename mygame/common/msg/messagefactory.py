@@ -2,11 +2,13 @@ import io
 
 from mygame.common.config.settings import BYTE_ENCODING
 from mygame.common.config.settings import BYTE_ORDER
-from mygame.common.msg.login import LoginRequest, LoginResponse
-from mygame.common.msg.unit import UnitRequest, UnitResponse
+from mygame.common.msg.loginrequest import LoginRequest
+from mygame.common.msg.loginresponse import LoginResponse
+from mygame.common.msg.unitrequest import UnitRequest
+from mygame.common.msg.unitresponse import UnitResponse
 
 
-class MessageIO:
+class MessageFactory:
     VERSION = 1
     TYPES = {
         LoginRequest.TYPE: LoginRequest,
@@ -17,8 +19,8 @@ class MessageIO:
 
     @staticmethod
     def get_message(msg_type):
-        if msg_type in MessageIO.TYPES:
-            return MessageIO.TYPES[msg_type]
+        if msg_type in MessageFactory.TYPES:
+            return MessageFactory.TYPES[msg_type]
         return None
 
     @staticmethod
@@ -28,7 +30,7 @@ class MessageIO:
         if version == 1:
             msg_type_len = int.from_bytes(iostream.read(1), byteorder=BYTE_ORDER, signed=False)
             msg_type = str(iostream.read(msg_type_len), BYTE_ENCODING)
-            msg = MessageIO.get_message(msg_type)
+            msg = MessageFactory.get_message(msg_type)
             if msg:
                 return msg.read(iostream)
             else:
@@ -39,7 +41,7 @@ class MessageIO:
     @staticmethod
     def write(socket, message, client=None):
         iostream = io.BytesIO()
-        iostream.write(int(MessageIO.VERSION).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
+        iostream.write(int(MessageFactory.VERSION).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
         msg_type_bytes = message.msg_type.encode(BYTE_ENCODING)
         iostream.write(len(msg_type_bytes).to_bytes(1, byteorder=BYTE_ORDER, signed=False))
         iostream.write(msg_type_bytes)
